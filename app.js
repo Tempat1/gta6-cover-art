@@ -73,6 +73,26 @@ function buildSamplePhoto() {
   g.fillStyle = sky;
   g.fillRect(0, 0, W, H * 0.72);
 
+  // Stars in the upper sky (seeded PRNG: same stars on every export)
+  for (var st = 0; st < 110; st++) {
+    var sx = rnd() * W, sy = rnd() * 360;
+    var sr = 0.6 + rnd() * 1.6;
+    g.fillStyle = "rgba(255,255,255," + (0.35 + rnd() * 0.55).toFixed(2) + ")";
+    g.beginPath(); g.arc(sx, sy, sr, 0, Math.PI * 2); g.fill();
+  }
+
+  // A few distant birds, dark silhouettes high in the sky
+  g.strokeStyle = "rgba(30,5,38,0.85)";
+  g.lineWidth = 3;
+  for (var bd = 0; bd < 7; bd++) {
+    var bx = 80 + rnd() * (W - 160), by = 90 + rnd() * 220, bs = 9 + rnd() * 9;
+    g.beginPath();
+    g.moveTo(bx - bs, by);
+    g.quadraticCurveTo(bx - bs * 0.4, by - bs * 0.7, bx, by);
+    g.quadraticCurveTo(bx + bs * 0.4, by - bs * 0.7, bx + bs, by);
+    g.stroke();
+  }
+
   // Sun with retro scanline gaps
   var sunX = W * 0.5, sunY = H * 0.44, sunR = 190;
   var sun = g.createLinearGradient(0, sunY - sunR, 0, sunY + sunR);
@@ -360,8 +380,19 @@ function exportPNG() {
   });
 }
 
+/* Both Export buttons show in-place feedback: "Rendering…" while the
+   PNG renders, then "Saved ✓", restoring the original label after 2.2s.
+   Buttons are disabled while rendering. The status line is kept too. */
+var exportBtns = [document.getElementById("exportBtn"), document.getElementById("exportBtn2")];
+var exportLabels = exportBtns.map(function (b) { return b.textContent; });
+
+function setExportState(label, disabled) {
+  exportBtns.forEach(function (b) { b.textContent = label; b.disabled = disabled; });
+}
+
 function downloadExport() {
   var status = document.getElementById("status");
+  setExportState("Rendering\u2026", true);
   status.textContent = "Rendering PNG\u2026";
   exportPNG().then(function (blob) {
     var url = URL.createObjectURL(blob);
@@ -372,8 +403,13 @@ function downloadExport() {
     a.click();
     a.remove();
     setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    setExportState("Saved \u2713", true);
     status.textContent = "Exported " + (blob.size / 1024).toFixed(0) + " KB PNG \u2014 1080\u00d71350.";
+    setTimeout(function () {
+      exportBtns.forEach(function (b, i) { b.textContent = exportLabels[i]; b.disabled = false; });
+    }, 2200);
   }).catch(function (err) {
+    exportBtns.forEach(function (b, i) { b.textContent = exportLabels[i]; b.disabled = false; });
     status.textContent = "Export failed: " + err.message;
   });
 }

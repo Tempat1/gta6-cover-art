@@ -51,7 +51,7 @@ body {
 
 .brand h1 {
   margin: 0;
-  font-size: 20px;
+  font-size: 22px;
   letter-spacing: .06em;
   text-transform: uppercase;
 }
@@ -80,6 +80,7 @@ body {
   color: #fff;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
 }
+.btn:disabled { opacity: .65; cursor: wait; transform: none; box-shadow: none; }
 .btn.ghost { background: transparent; }
 .btn.wide { width: 100%; margin-bottom: 8px; }
 
@@ -108,20 +109,42 @@ body {
 .canvas-wrap:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
 .canvas-wrap.dragging { outline: 3px dashed var(--teal); outline-offset: -3px; }
 
+/* Desktop: cap the preview by viewport height so the whole poster
+   (VI title, subtitle, caption bar) is visible at once. The poster is
+   1080x1350 (4:5), so width = height x 0.8. Mobile is unaffected. */
+@media (min-width: 901px) {
+  .canvas-wrap {
+    max-width: min(100%, calc((100vh - 220px) * 0.8));
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 #cover { display: block; width: 100%; height: auto; }
 
 .drop-hint {
   position: absolute;
-  inset: auto 0 14px 0;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(10, 2, 20, .78);
+  border: 1px solid rgba(255, 255, 255, .28);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .5);
   text-align: center;
   color: #fff;
   font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
   text-shadow: 0 1px 6px rgba(0, 0, 0, .8);
   pointer-events: none;
-  opacity: .85;
-  display: none; /* shown only while a file is dragged over the canvas */
+  opacity: .95;
+  display: none; /* floating pill: shown on hover, keyboard focus, or drag-over */
 }
+.canvas-wrap:hover .drop-hint,
+.canvas-wrap:focus-visible .drop-hint,
+.canvas-wrap:focus-within .drop-hint,
 .canvas-wrap.dragging .drop-hint { display: block; }
 
 .size-note { color: var(--muted); font-size: 13px; text-align: center; }
@@ -212,4 +235,6 @@ footer { padding: 8px 28px 28px; text-align: center; color: var(--muted); font-s
   .preview-col { position: static; }
   .topbar { padding: 14px 16px; }
   .layout { padding: 16px; }
+  .brand h1 { font-size: 19px; }
+  .brand-vi { font-size: 36px; padding: 5px 12px; }
 }
