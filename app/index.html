@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GTA VI Cover Art Maker</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="vi-badge" aria-hidden="true">VI</span>
+    <div class="brand-text">
+      <h1>GRAND THEFT AUTO VI — Cover Art Maker</h1>
+      <p>Turn your photo into a Vice City poster. 100% offline — nothing leaves your browser.</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button id="sampleBtn" class="btn ghost" type="button">Use sample photo</button>
+    <button id="exportBtn" class="btn primary" type="button">Export PNG</button>
+  </div>
+</header>
+
+<main class="layout">
+  <div class="preview-col">
+    <div class="canvas-wrap" id="dropZone" tabindex="0" role="button" aria-label="Drop a photo here or click to upload">
+      <canvas id="cover" width="1080" height="1350"></canvas>
+      <span class="drop-hint" id="dropHint">Drop a photo here or click to upload</span>
+      <input type="file" id="fileInput" accept="image/*" hidden>
+    </div>
+    <p class="size-note">Export: 1080 × 1350 PNG (4:5) — ready to share.</p>
+  </div>
+
+  <aside class="controls">
+    <section class="panel">
+      <h2>1 · Your photo</h2>
+      <button id="uploadBtn" class="btn wide" type="button">Upload a photo</button>
+      <button id="sampleBtn2" class="btn wide ghost" type="button">Use built-in sample (sunset skyline)</button>
+      <label class="slider-row">
+        <span>Zoom</span>
+        <input type="range" id="zoom" min="100" max="220" value="130">
+        <span class="val" id="zoomVal">130%</span>
+      </label>
+      <label class="slider-row">
+        <span>Pan</span>
+        <input type="range" id="pan" min="0" max="100" value="50">
+        <span class="val" id="panVal">50%</span>
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2>2 · Caption</h2>
+      <label class="field-label" for="caption">Caption</label>
+      <input type="text" id="caption" maxlength="48" value="WELCOME BACK TO VICE CITY" placeholder="Your caption, e.g. WELCOME BACK TO VICE CITY">
+      <label class="field-label" for="subtitle">Subtitle</label>
+      <input type="text" id="subtitle" maxlength="40" value="LEONIDA • 2026" placeholder="Small line, e.g. LEONIDA • 2026">
+      <label class="check-row">
+        <input type="checkbox" id="showTitle" checked>
+        <span>Show GTA VI title treatment</span>
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2>3 · Colour grade</h2>
+      <div class="btn-group" role="radiogroup" aria-label="Colour grade">
+        <button type="button" class="preset is-active" data-preset="sunset" role="radio" aria-checked="true"><span class="swatch sunset"></span>Sunset</button>
+        <button type="button" class="preset" data-preset="neon" role="radio" aria-checked="false"><span class="swatch neon"></span>Neon</button>
+        <button type="button" class="preset" data-preset="vice" role="radio" aria-checked="false"><span class="swatch vice"></span>Vice City</button>
+      </div>
+      <label class="slider-row">
+        <span>Grade</span>
+        <input type="range" id="grade" min="0" max="100" value="80">
+        <span class="val" id="gradeVal">80%</span>
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2>4 · Panel layout</h2>
+      <div class="btn-group" role="radiogroup" aria-label="Panel layout">
+        <button type="button" class="layout-btn is-active" data-layout="stacked" role="radio" aria-checked="true"><span class="thumb stacked"></span>Stacked</button>
+        <button type="button" class="layout-btn" data-layout="diagonal" role="radio" aria-checked="false"><span class="thumb diagonal"></span>Diagonal</button>
+        <button type="button" class="layout-btn" data-layout="grid" role="radio" aria-checked="false"><span class="thumb grid"></span>Comic grid</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>5 · Export</h2>
+      <p class="hint">The poster is drawn on canvas and downloaded as a PNG. Same inputs, same PNG — every time.</p>
+      <button id="exportBtn2" class="btn primary wide" type="button">Download cover PNG</button>
+      <p class="status" id="status" role="status"></p>
+    </section>
+  </aside>
+</main>
+
+<footer>A fan-made cover art tool. Not affiliated with Rockstar Games. All lettering is drawn with CSS/canvas — no Rockstar artwork is used.</footer>
+
+<script src="./app.js"></script>
+</body>
+</html>
